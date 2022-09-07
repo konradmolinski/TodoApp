@@ -13,11 +13,11 @@
     background: #ddd;
 }
 .todo-done { 
-    text-decoration: line-through;
     background: #888;
     color: #fff;
 }
 .close-btn {
+    width: 3%;
     right: 0;
     top: 0;
     padding: 12px 12px 12px 12px;
@@ -31,4 +31,8 @@
     display: flex;
     justify-content: space-between;
     padding-left: 1%;
+}
+
+#text-div {
+    width: 97%;
 }

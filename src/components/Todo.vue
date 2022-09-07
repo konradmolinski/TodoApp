@@ -20,9 +20,11 @@
 </script>
 
 <template>
-    <div id="todo-div" @click="toggleCheck">
-        <p v-if="!done">{{ todo.title }}</p>
-        <p v-else class="todo-done">{{ todo.title }}</p>
-        <span @click="deleteTodo" class="close-btn">x</span>
+    <div id="todo-div" :class="{'todo-done': done}">
+        <div id="text-div" @click="toggleCheck">
+            <p v-if="!done">{{ todo.title }}</p>
+            <p v-else style="text-decoration: line-through">{{ todo.title }}</p>
+        </div>
+    <span @click="deleteTodo" class="close-btn">x</span>
     </div>
 </template>
