@@ -1,0 +1,34 @@
+#todo-list {
+    list-style: none
+}
+#todo-list > li {
+    margin: auto;
+    width: 75%;
+    background: #eee;
+}
+#todo-list > li:nth-child(odd){
+    background: #f9f9f9;
+}
+#todo-list > li:hover {
+    background: #ddd;
+}
+.todo-done { 
+    text-decoration: line-through;
+    background: #888;
+    color: #fff;
+}
+.close-btn {
+    right: 0;
+    top: 0;
+    padding: 12px 12px 12px 12px;
+  } 
+.close-btn:hover {
+    background: #f44336;
+    color: white;
+}
+
+#todo-div {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 1%;
+}
