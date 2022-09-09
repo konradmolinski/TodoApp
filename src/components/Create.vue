@@ -7,9 +7,13 @@
     },
     methods: {
         addTodo() {
-            const todo = {title: this.title, done: false, date: new Date()}
-            this.todos.push(todo)
-            window.localStorage.setItem('todoList' , JSON.stringify(this.todos))
+            if (this.title.trim().length === 0) { 
+                console.warn('Title required.')   
+            } else {
+                const todo = {title: this.title, done: false, date: new Date()}
+                this.todos.push(todo)
+                window.localStorage.setItem('todoList' , JSON.stringify(this.todos))
+            }
         }
     },
     props: ['todos']
