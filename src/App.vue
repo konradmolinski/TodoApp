@@ -25,7 +25,10 @@
       }
     },
     beforeCreate() {
-      if (window.localStorage.length === 0) window.localStorage.setItem('todoList', JSON.stringify([]))
+      if (window.localStorage.length === 0) {
+        window.localStorage.setItem('todoList', JSON.stringify([]))
+        window.localStorage.setItem('latestID', JSON.stringify(1))
+      }
     }
   }
 </script>
@@ -33,6 +36,7 @@
 <template>
   <Create 
   :todos=todos />
+  <p v-if="this.todos.length === 0" style="text-align: center;">No tasks yet.</p>
   <ul id="todo-list">
     <li v-for = "todo in todos">
       <Todo
@@ -41,5 +45,5 @@
       :todo = todo />
     </li>
   </ul>
-  <button @click="deleteDone" type="button">delete done tasks</button>
+  <button id="delete-btn" @click="deleteDone" type="button">delete completed</button>
 </template>

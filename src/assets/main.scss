@@ -1,5 +1,49 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+}
+
+h1 {
+    color: white;
+    margin: auto;
+    text-align: center;
+}
+
+#create-div {
+    background-color: #f44336;
+    margin: auto;
+    width: 75%;
+}
+
+#create-div > button {
+    padding: 10px;
+    width: 20%;
+    background: #d9d9d9;
+    color: #555;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+#create-div > button:hover {
+    background-color: #bbb;
+}
+
+#title-input {
+    width: 75%;
+    padding: 10px;
+    margin: 15px;
+    margin-right: 0px;
+    border: 0;
+    font-size: 16px;
+    outline: none;
+}
+
 #todo-list {
-    list-style: none
+    list-style: none;
+    padding-inline-start: 0px;
+    margin-top: 0;
 }
 #todo-list > li {
     margin: auto;
@@ -21,6 +65,8 @@
     right: 0;
     top: 0;
     padding: 12px 12px 12px 12px;
+    font-size: 22px;
+    text-align: center;
   } 
 .close-btn:hover {
     background: #f44336;
@@ -35,4 +81,22 @@
 
 #text-div {
     width: 97%;
+}
+
+#delete-btn {
+    margin-left: 12.5%;
+    margin-top: 0;
+    padding: 10px;
+    background: #d9d9d9;
+    color: #555;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    width: 75%;
+    transition: 0.3s;
+}
+
+#delete-btn:hover {
+    background-color: #bbb;
 }

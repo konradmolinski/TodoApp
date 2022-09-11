@@ -2,7 +2,8 @@
     export default {
     data() {
         return {
-            title: ''
+            title: '',
+            latestID: JSON.parse(window.localStorage.getItem('latestID'))
         }
     },
     methods: {
@@ -10,9 +11,11 @@
             if (this.title.trim().length === 0) { 
                 console.warn('Title required.')   
             } else {
-                const todo = {title: this.title, done: false, date: new Date()}
+                const todo = {id: this.latestID, title: this.title, done: false, date: new Date()}
                 this.todos.push(todo)
                 window.localStorage.setItem('todoList' , JSON.stringify(this.todos))
+                this.latestID ++
+                window.localStorage.setItem('latestID', JSON.stringify(this.latestID))
             }
         }
     },
@@ -21,7 +24,9 @@
 </script>
 
 <template>
-    <h1>Create Todo:</h1>
-    <input v-model="title" type="text">
-    <button @click="addTodo" type="button">Add</button>
+    <div id="create-div">
+        <h1>Todo App</h1>
+        <input id="title-input" v-model="title" type="text">
+        <button @click="addTodo" type="button">Add</button>
+    </div>
 </template>
