@@ -36,7 +36,7 @@
 <template>
   <Create 
   :todos=todos />
-  <p v-if="this.todos.length === 0" style="text-align: center;">No tasks yet.</p>
+  <p v-if="this.todos.length === 0" id="empty-list-info">No tasks yet.</p>
   <ul id="todo-list">
     <li v-for = "todo in todos">
       <Todo

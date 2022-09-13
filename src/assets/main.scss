@@ -60,6 +60,14 @@ h1 {
     background: #888;
     color: #fff;
 }
+#todo-title-done {
+    text-decoration: line-through;
+}
+
+#empty-list-info {
+    text-align: center;
+}
+
 .close-btn {
     width: 3%;
     right: 0;
