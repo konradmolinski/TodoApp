@@ -1,3 +1,13 @@
+<template>
+    <div id="todo-div" :class="{'todo-done': this.todo.done}">
+        <div id="text-div" @click="toggleCheck">
+            <p v-if="!this.todo.done">{{ todo.title }}</p>
+            <p v-else id="todo-title-done">{{ todo.title }}</p>
+        </div>
+    <span @click="deleteTodo" class="close-btn">&#215</span>
+    </div>
+</template>
+
 <script>
     export default {
     props: ['todo', 'todos'],
@@ -13,13 +23,3 @@
     },
 }
 </script>
-
-<template>
-    <div id="todo-div" :class="{'todo-done': this.todo.done}">
-        <div id="text-div" @click="toggleCheck">
-            <p v-if="!this.todo.done">{{ todo.title }}</p>
-            <p v-else id="todo-title-done">{{ todo.title }}</p>
-        </div>
-    <span @click="deleteTodo" class="close-btn">&#215</span>
-    </div>
-</template>

@@ -1,3 +1,11 @@
+<template>
+    <div id="create-div">
+        <h1>Todo App</h1>
+        <input id="title-input" v-model="title" type="text">
+        <button @click="addTodo" type="button">Add</button>
+    </div>
+</template>
+
 <script>
     export default {
     data() {
@@ -22,11 +30,3 @@
     props: ['todos']
 }
 </script>
-
-<template>
-    <div id="create-div">
-        <h1>Todo App</h1>
-        <input id="title-input" v-model="title" type="text">
-        <button @click="addTodo" type="button">Add</button>
-    </div>
-</template>

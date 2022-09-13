@@ -1,3 +1,18 @@
+<template>
+  <Create 
+  :todos=todos />
+  <p v-if="this.todos.length === 0" id="empty-list-info">No tasks yet.</p>
+  <ul id="todo-list">
+    <li v-for = "todo in todos">
+      <Todo
+      @toggleCheck="toggleDoneState"
+      :todos = todos
+      :todo = todo />
+    </li>
+  </ul>
+  <button id="delete-btn" @click="deleteDone" type="button">delete completed</button>
+</template>
+
 <script>
   import Create from './components/Create.vue'
   import Todo from './components/Todo.vue'
@@ -32,18 +47,3 @@
     }
   }
 </script>
-
-<template>
-  <Create 
-  :todos=todos />
-  <p v-if="this.todos.length === 0" id="empty-list-info">No tasks yet.</p>
-  <ul id="todo-list">
-    <li v-for = "todo in todos">
-      <Todo
-      @toggleCheck="toggleDoneState"
-      :todos = todos
-      :todo = todo />
-    </li>
-  </ul>
-  <button id="delete-btn" @click="deleteDone" type="button">delete completed</button>
-</template>
