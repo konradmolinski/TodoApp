@@ -1,13 +1,13 @@
 <template>
   <Create 
-  :todos=todos />
-  <p v-if="this.todos.length === 0" id="empty-list-info">No tasks yet.</p>
+  :api = api />
+  <p v-if="this.api.todos.length === 0" id="empty-list-info">No tasks yet.</p>
   <ul id="todo-list">
-    <li v-for = "todo in todos">
+    <li v-for = "todo in api.todos">
       <Todo
-      @toggleCheck="toggleDoneState"
-      :todos = todos
-      :todo = todo />
+      :todo = todo
+      :api = api
+       />
     </li>
   </ul>
   <button id="delete-btn" @click="deleteDone" type="button">delete completed</button>
@@ -16,11 +16,12 @@
 <script>
   import Create from './components/Create.vue'
   import Todo from './components/Todo.vue'
+  import { APIOperations } from './APIOperations.js'
 
   export default {
     data() {
       return {
-        todos: JSON.parse({ ...localStorage }['todoList'])
+        api: new APIOperations()
       }
     },
     components: {
@@ -29,15 +30,8 @@
     },
     methods: {
       deleteDone() {
-        this.todos = this.todos.filter(element => element.done == false)
-        window.localStorage.setItem('todoList' , JSON.stringify(this.todos))
+        this.api.deleteCompletedTasks()
       },
-      toggleDoneState(todoInstance) {
-        todoInstance.done = !todoInstance.done
-        const todoIdx = this.todos.indexOf(todoInstance)
-        this.todos[todoIdx].done = todoInstance.done
-        window.localStorage.setItem('todoList', JSON.stringify(this.todos))
-      }
     },
     beforeCreate() {
       if (window.localStorage.length === 0) {

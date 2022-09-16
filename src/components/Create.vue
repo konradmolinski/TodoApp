@@ -19,14 +19,12 @@
             if (this.title.trim().length === 0) { 
                 console.warn('Title required.')   
             } else {
-                const todo = {id: this.latestID, title: this.title, done: false, date: new Date()}
-                this.todos.push(todo)
-                window.localStorage.setItem('todoList' , JSON.stringify(this.todos))
-                this.latestID ++
-                window.localStorage.setItem('latestID', JSON.stringify(this.latestID))
+                this.api.createTask(this.latestID, this.title)
+                this.latestID = JSON.parse({ ...localStorage }['latestID'])
             }
+            this.title = ""
         }
     },
-    props: ['todos']
+    props: ['api']
 }
 </script>

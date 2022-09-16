@@ -68,7 +68,7 @@ h1 {
     text-align: center;
 }
 
-.close-btn {
+.close-btn, .up-btn, .down-btn, .no-btn {
     width: 3%;
     right: 0;
     top: 0;
@@ -76,8 +76,14 @@ h1 {
     font-size: 22px;
     text-align: center;
   } 
+
 .close-btn:hover {
     background: #f44336;
+    color: white;
+}
+
+.up-btn:hover, .down-btn:hover  {
+    background: #6495ED;
     color: white;
 }
 
@@ -88,7 +94,7 @@ h1 {
 }
 
 #text-div {
-    width: 97%;
+    width: 91%;
 }
 
 #delete-btn {
