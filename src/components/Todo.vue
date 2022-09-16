@@ -1,6 +1,6 @@
 <template>
     <div id="todo-div" :class="{'todo-done': this.todo.done}">
-        <div id="text-div" @click="toggleCheck">
+        <div id="text-div" @click="toggleTaskCompleted">
             <p v-if="!this.todo.done">{{ todo.title }}</p>
             <p v-else id="todo-title-done">{{ todo.title }}</p>
         </div>
@@ -21,8 +21,8 @@
     },
     props: ['todo', 'api'],
     methods: {
-        toggleCheck() {
-            this.api.toggleTask(this.todo)
+        toggleTaskCompleted() {
+            this.api.toggleTaskCompleted(this.todo)
         },
         deleteTodo() {
             this.api.deleteTask(this.todoIdx)
@@ -34,10 +34,10 @@
             return this.todoIdx === 0
         },
         moveUp() {
-            this.api.reorderTask(this.todoIdx, -1)
+            this.api.reorderTask(this.todoIdx, this.todoIdx -1)
         },
         moveDown() {
-            this.api.reorderTask(this.todoIdx, 1)
+            this.api.reorderTask(this.todoIdx, this.todoIdx +1)
         },
     },
 }

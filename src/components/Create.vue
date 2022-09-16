@@ -11,7 +11,6 @@
     data() {
         return {
             title: '',
-            latestID: JSON.parse(window.localStorage.getItem('latestID'))
         }
     },
     methods: {
@@ -19,8 +18,7 @@
             if (this.title.trim().length === 0) { 
                 console.warn('Title required.')   
             } else {
-                this.api.createTask(this.latestID, this.title)
-                this.latestID = JSON.parse({ ...localStorage }['latestID'])
+                this.api.createTask(this.title)
             }
             this.title = ""
         }

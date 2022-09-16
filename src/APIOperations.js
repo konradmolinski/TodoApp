@@ -6,29 +6,23 @@ export class APIOperations {
     }
     refreshLocalStorage() {
         this.todos = JSON.parse({ ...localStorage }['todoList'])
+        this.id = JSON.parse({ ...localStorage }['latestID'])
     }
-    reorderTask(index, direction) { // direction -1 = up 1 = down
-        const todo = this.todos[index]
-        const higherTodo = this.todos[index + direction]
+    reorderTask(todoIdx1, todoIdx2) {
+        const task1 = this.todos[todoIdx1]
+        const task2 = this.todos[todoIdx2]
 
-        this.todos[index + direction] = todo
-        this.todos[index] = higherTodo
+        this.todos[todoIdx1] = task2
+        this.todos[todoIdx2] = task1
 
         window.localStorage.setItem('todoList', JSON.stringify(this.todos))
         this.refreshLocalStorage()
     }
-    createTask(id, title) {
-        // returns full object 
-        // task {
-        //     "uuid",
-        //     "text",
-        //     "created_at",
-        //     "order"
-        // }
-        const todo = {id: id, title: title, done: false, date: new Date()}
+    createTask(title) {
+        const todo = {id: this.id, title: title, done: false, date: new Date()}
         this.todos.push(todo)
         window.localStorage.setItem('todoList', JSON.stringify(this.todos))
-        window.localStorage.setItem('latestID', JSON.stringify(id+1))
+        window.localStorage.setItem('latestID', JSON.stringify(this.id+1))
         this.refreshLocalStorage()
     }
     deleteTask(todoIdx) {
@@ -36,7 +30,7 @@ export class APIOperations {
         window.localStorage.setItem('todoList' , JSON.stringify(this.todos))
         this.refreshLocalStorage()
      }
-    toggleTask(todo) {
+    toggleTaskCompleted(todo) {
         todo.done = !todo.done
         const todoIdx = this.todos.indexOf(todo)
         this.todos[todoIdx].done = todo.done
