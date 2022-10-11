@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import uuid4
 from sqlalchemy import Boolean, Column, Integer, String, Text
 from .database import Base
 

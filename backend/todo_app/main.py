@@ -78,10 +78,11 @@ def update_todo_state(todo_id: int, db: Session = Depends(get_db)):
 
 @app.put("/todos-reorder")
 def reorder_todos(reorder_params: ReorderParams, db: Session = Depends(get_db)):
-    try:
-        return crud.reorder_todos(db, reorder_params=(reorder_params['first_id'], reorder_params['second_id']))
-    except:
-        return status.HTTP_400_BAD_REQUEST
+    # try:
+    return crud.reorder_todos(db, reorder_params=(reorder_params.first_id, reorder_params.second_id))
+    # except Exception as ex:
+        # logger.error(ex)
+        # raise HTTPException(status_code=400, detail="Couldn't add new todo")
 
 @app.get("/todos/{todo_id}", response_model=schemas.Todo)
 def read_todo(todo_id: int, db: Session = Depends(get_db)):

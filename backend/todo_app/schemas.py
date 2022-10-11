@@ -3,7 +3,8 @@ from pydantic import BaseModel
 class TodoBase(BaseModel):
     title: str
 
-class TodoCreate(TodoBase): #data that is required while creating Todo, but will not be sent from the API when reading Todo
+class TodoCreate(TodoBase): 
+    # Data that is required while creating Todo, but will not be sent from the API when reading Todo
     pass
 
 class Todo(TodoBase):
