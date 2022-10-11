@@ -6,7 +6,7 @@ class Todo(Base):
     __tablename__ = "todos"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullalble=False)
+    title = Column(String, nullable=False)
     done = Column(Boolean, default=False)
     date = Column(Text, default=datetime.now())
     order_id = Column(Integer, nullable=False, unique=True)
