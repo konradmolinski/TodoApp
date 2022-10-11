@@ -1,0 +1,41 @@
+Started server process [13972]
+Waiting for application startup.
+Application startup complete.
+Shutting down
+Waiting for application shutdown.
+Application shutdown complete.
+Finished server process [13972]
+Started server process [14043]
+Waiting for application startup.
+Application startup complete.
+Creating todo with parameters title='ad dolor'
+(sqlite3.IntegrityError) NOT NULL constraint failed: todos.order_id
+[SQL: INSERT INTO todos (title, done, date, order_id) VALUES (?, ?, ?, ?)]
+[parameters: ('ad dolor', 0, datetime.datetime(2022, 10, 12, 0, 27, 18, 199789), None)]
+(Background on this error at: https://sqlalche.me/e/14/gkpj)
+Shutting down
+Waiting for application shutdown.
+Application shutdown complete.
+Finished server process [14043]
+2022-10-12 00:27:45,787 - server - serve - line:75 - INFO - Started server process [14089]
+2022-10-12 00:27:45,787 - on - startup - line:47 - INFO - Waiting for application startup.
+2022-10-12 00:27:45,787 - on - startup - line:61 - INFO - Application startup complete.
+2022-10-12 00:27:51,147 - main - create_todo - line:50 - INFO - Creating todo with parameters title='ad dolor'
+2022-10-12 00:27:51,149 - main - create_todo - line:54 - ERROR - (sqlite3.IntegrityError) NOT NULL constraint failed: todos.order_id
+[SQL: INSERT INTO todos (title, done, date, order_id) VALUES (?, ?, ?, ?)]
+[parameters: ('ad dolor', 0, datetime.datetime(2022, 10, 12, 0, 27, 45, 727627), None)]
+(Background on this error at: https://sqlalche.me/e/14/gkpj)
+2022-10-12 00:28:25,307 - server - shutdown - line:253 - INFO - Shutting down
+2022-10-12 00:28:25,408 - on - shutdown - line:66 - INFO - Waiting for application shutdown.
+2022-10-12 00:28:25,408 - on - shutdown - line:77 - INFO - Application shutdown complete.
+2022-10-12 00:28:25,408 - server - serve - line:85 - INFO - Finished server process [14089]
+2022-10-12 00:28:25,665 - server - serve - line:75 - INFO - Started server process [14143]
+2022-10-12 00:28:25,666 - on - startup - line:47 - INFO - Waiting for application startup.
+2022-10-12 00:28:25,666 - on - startup - line:61 - INFO - Application startup complete.
+2022-10-12 00:28:36,181 - server - shutdown - line:253 - INFO - Shutting down
+2022-10-12 00:28:36,282 - on - shutdown - line:66 - INFO - Waiting for application shutdown.
+2022-10-12 00:28:36,282 - on - shutdown - line:77 - INFO - Application shutdown complete.
+2022-10-12 00:28:36,282 - server - serve - line:85 - INFO - Finished server process [14143]
+2022-10-12 00:28:36,515 - server - serve - line:75 - INFO - Started server process [14174]
+2022-10-12 00:28:36,515 - on - startup - line:47 - INFO - Waiting for application startup.
+2022-10-12 00:28:36,516 - on - startup - line:61 - INFO - Application startup complete.

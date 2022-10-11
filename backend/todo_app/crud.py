@@ -33,14 +33,14 @@ def update_todo_state(db: Session, todo_id: int):
         raise HTTPException(status_code=404, detail=f"todo item with id {todo_id} not found.")
     todo.done = not todo.done
     db.commit()
+    return todo
 
-def reorder_todos(db: Session, reorder_params: dict):
-    first_id = reorder_params['first_id']
-    second_id = reorder_params['second_id']
-
-    first_todo = db.query(models.Todo).filter(models.Todo.id == first_id).first()
-    first_todo.order_id = second_id
-    second_todo = db.query(models.Todo).filter(models.Todo.id == second_id).first()
-    second_todo.order_id = first_id
+def reorder_todos(db: Session, reorder_params: tuple[int, int]):
+    first_todo = db.query(models.Todo).filter(models.Todo.id == reorder_params[0]).first()
+    first_todo.order_id = reorder_params[1]
+    second_todo = db.query(models.Todo).filter(models.Todo.id == reorder_params[1]).first()
+    second_todo.order_id = reorder_params[0]
     
     db.commit()
+
+    return first_todo, second_todo
