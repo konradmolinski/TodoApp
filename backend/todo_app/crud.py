@@ -1,19 +1,23 @@
 from http.client import HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from . import models, schemas
 
 def get_todo(db: Session, todo_id: int):
     return db.query(models.Todo).filter(models.Todo.id == todo_id).first()
 
-def get_todo_by_title(db: Session, title: str):
-    return db.query(models.Todo).filter(models.Todo.title == title).first()
-
 def get_todos(db: Session):
-    return db.query(models.Todo).all()
+    q = db.query(models.Todo).order_by(models.Todo.order_id).all()
+    return q
 
 def create_todo(db: Session, todo: schemas.TodoCreate):
-    db_todo = models.Todo(title=todo.title)
+    highest_order_id = db.query(func.max(models.Todo.order_id)).first()
+    if highest_order_id._data[0]: #if there is at least one row/latest order_id is 1
+        db_todo = models.Todo(title=todo.title, order_id=highest_order_id._data[0] + 1)
+    else: #order_id starts from integer 1
+        db_todo = models.Todo(title=todo.title, order_id=1)
+
     db.add(db_todo)
     db.commit()
     db.refresh(db_todo)

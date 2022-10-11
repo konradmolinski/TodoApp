@@ -47,11 +47,6 @@ def test_get_todo():
     assert response.status_code == 200
     assert response.json()['title'] == "przemekhuj"
 
-def test_get_todos():
-    response = client.get("/todos")
-    assert response.status_code == 200
-    assert len(response.json()) == 1
-
 def test_update_todo_state():
     response = client.put(
         "/todos/1",
@@ -66,9 +61,38 @@ def test_delete_todo():
     response = client.delete("/todos/1")
     assert response.status_code == 204
 
+def test_create_multiple_todos():
+
+    for i in range(1, 6):
+        response = client.post(
+        "/todos",
+        json={"title": f"przemekhuj{i}"})
+        assert response.status_code == 200
+        assert response.json()['order_id'] == i
+
+def test_reordering_todos():
+
+    response = client.put(
+        "/todos-reorder",
+        json={"first_id": "2", "second_id": "3"})
+    assert response.status_code == 204
+
+    response = client.get("/todos/2")
+    assert response.status_code == 200
+    assert response.json()['order_id'] == 3
+
+    response = client.get("/todos/3")
+    assert response.status_code == 200
+    assert response.json()['order_id'] == 2
+
+def test_get_todos():
+    response = client.get("/todos")
+    assert response.status_code == 200
+    assert len(response.json()) == 5
+
+    for i, element in enumerate(response.json()):
+        assert element['order_id'] == i + 1
+
 def test_delete_completed_todos():
     response = client.delete("/todos")
     assert response.status_code == 204
-
-
-# def update_todoŔ
