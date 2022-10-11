@@ -1,3 +1,9 @@
+.pytest_cache
+.vscode
+*.db
+__pycache__
+
+
 # Logs
 logs
 *.log
@@ -33,3 +39,4 @@ main.css.map
 
 *.pyc
 *.db
+*.log

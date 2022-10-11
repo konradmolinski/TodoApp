@@ -96,3 +96,5 @@ def test_get_todos():
 def test_delete_completed_todos():
     response = client.delete("/todos")
     assert response.status_code == 204
+
+
