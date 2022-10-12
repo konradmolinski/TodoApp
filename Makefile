@@ -6,7 +6,7 @@ install:
 
 
 serve_frontend:
-	npm run dev
+	cd frontend && npm run dev
 
 serve_backend:
 	cd backend && uvicorn todo_app.main:app --reload

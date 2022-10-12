@@ -32,11 +32,15 @@ repos:
       - id: mypy
         args:
           - --show-error-codes
-
-
-
-# sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
-ci:
-  autoupdate_schedule: weekly
-  skip: []
-  submodules: false
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: ''
+    # entry: bash -c ' echo piwo && cd frontend && eslint . --fix'
+    hooks:
+    -   id: eslint
+        files: \.([jt]sx)|.([vue])?$  # *.js, *.jsx, *.ts and *.tsx
+        types: [file]
+        types_or: [javascript, jsx, ts, tsx, vue]
+        args:
+          - --config=./frontend/.eslintrc.yml
+        additional_dependencies:
+          -   eslint-plugin-vue@v7.5.0
