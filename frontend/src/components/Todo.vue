@@ -7,7 +7,7 @@
     <span v-if="!isFirst()" @click="moveUp" class="up-btn">&uarr;</span>
     <span v-if="isLast()" class="no-btn"> </span>
     <span v-if="!isLast()" @click="moveDown" class="down-btn">&darr;</span>
-    
+
     <span  @click="deleteTodo" class="close-btn">&#215</span>
     </div>
 </template>

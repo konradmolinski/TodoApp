@@ -1,50 +1,73 @@
+from collections.abc import Iterator
+from contextlib import contextmanager
+from datetime import datetime
 from http.client import HTTPException
-from sqlalchemy.orm import Session
-from sqlalchemy import func
+from typing import TypeVar
 
-from . import models, schemas
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
-def get_todo(db: Session, todo_id: int):
-    return db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+from . import db_models, schemas
 
-def get_todos(db: Session):
-    q = db.query(models.Todo).order_by(models.Todo.order_id).all()
-    return q
+SQLALCHEMY_DATABASE_URL = "sqlite:///./todo_app.db"
 
-def create_todo(db: Session, todo: schemas.TodoCreate):
-    highest_order_id = db.query(func.max(models.Todo.order_id)).first()
-    if highest_order_id._data[0]: #if there is at least one row/latest order_id is 1
-        db_todo = models.Todo(title=todo.title, order_id=highest_order_id._data[0] + 1)
-    else: #order_id starts from integer 1
-        db_todo = models.Todo(title=todo.title, order_id=1)
+_T = TypeVar("_T", bound="DBOperations")
 
-    db.add(db_todo)
-    db.commit()
-    db.refresh(db_todo)
-    return db_todo
 
-def delete_completed_todos(db: Session):
-    db.query(models.Todo).filter(models.Todo.done == True).delete()
-    db.commit()
+class DBOperations:
+    """
+    Context manager wrapping database operations
+    - automatically openning and closing sesion
+    """
 
-def delete_todo(db: Session, todo_id: int):
-    db.query(models.Todo).filter(models.Todo.id == todo_id).delete()
-    db.commit()
+    def __init__(self, session: Session):
+        self.session: Session = session
 
-def update_todo_state(db: Session, todo_id: int):
-    todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
-    if not todo:
-        raise HTTPException(status_code=404, detail=f"todo item with id {todo_id} not found.")
-    todo.done = not todo.done
-    db.commit()
-    return todo
+    @contextmanager
+    def __call__(self: _T) -> Iterator[_T]:
+        with self.from_db(session=self.session) as dbo:
+            yield dbo
 
-def reorder_todos(db: Session, reorder_params: tuple[int, int]):
-    first_todo = db.query(models.Todo).filter(models.Todo.id == reorder_params[0]).first()
-    first_todo.order_id = reorder_params[1]
-    second_todo = db.query(models.Todo).filter(models.Todo.id == reorder_params[1]).first()
-    second_todo.order_id = reorder_params[0]
-    
-    db.commit()
+    @classmethod
+    @contextmanager
+    def from_db(cls: type[_T], session: Session) -> Iterator[_T]:
+        """
+        Create database session.
+        """
+        try:
+            instance = cls(session=session)
+            yield instance
+        finally:
+            instance.session.close()
 
-    return first_todo, second_todo
+
+class TodoDB(DBOperations):
+    def get_todo(self, todo_id: int) -> db_models.Todo | None:
+        return (  # type: ignore
+            self.session.query(db_models.Todo)
+            .filter(db_models.Todo.id == todo_id)
+            .first()
+        )
+
+    def get_todos(self) -> list[db_models.Todo]:
+        return self.session.query(db_models.Todo).order_by(db_models.Todo.id).all()  # type: ignore
+
+    def create_todo(self, todo: db_models.Todo) -> db_models.Todo:
+        todo = db_models.Todo(title=todo.title)
+        self.session.add(todo)
+        self.session.commit()
+        self.session.refresh(todo)
+        return todo
+
+    def delete_todo(self, todo_id: int) -> None:
+        self.session.query(db_models.Todo).filter(db_models.Todo.id == todo_id).delete()
+        self.session.commit()
+
+    def get_users(self) -> list[db_models.User]:
+        return self.session.query(db_models.User).all()  # type: ignore
+
+    def get_users_stats(
+        self, date_min: datetime | None = None, date_max: datetime | None = None
+    ) -> list[schemas.UserStats]:
+        pass
+        # return schemas.UserStats()

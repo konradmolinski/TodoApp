@@ -6,9 +6,9 @@ Simple CRUD operations so far.
 
 `make install`
 
-# Run dev 
+# Run dev
 
-Activate environment: 
+Activate environment:
 `pipenv shell`
 
 Run frontend:
