@@ -15,8 +15,8 @@
     },
     methods: {
         addTodo() {
-            if (this.title.trim().length === 0) { 
-                console.warn('Title required.')   
+            if (this.title.trim().length === 0) {
+                console.warn('Title required.')
             } else {
                 this.api.createTask(this.title)
             }

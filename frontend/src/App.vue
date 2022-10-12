@@ -1,5 +1,5 @@
 <template>
-  <Create 
+  <Create
   :api = api />
   <p v-if="this.api.todos.length === 0" id="empty-list-info">No tasks yet.</p>
   <ul id="todo-list">
