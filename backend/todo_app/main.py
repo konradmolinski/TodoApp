@@ -1,6 +1,5 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
-from turtle import st
 
 from fastapi import Depends, FastAPI, HTTPException, Response, status
 from sqlalchemy.orm import Session
