@@ -1,41 +1,34 @@
 <template>
-  <Create :api="api" />
-  <p v-if="this.api.todos.length === 0" id="empty-list-info">No tasks yet.</p>
+  <p v-if="this.tasks.length === 0" id="empty-list-info">All done!</p>
   <ul id="todo-list">
-    <li v-for="todo in api.todos" :key="todo.id">
-      <Todo :todo="todo" :api="api" />
+    <li v-for="task in tasks" :key="task.id">
+      <div id="todo-div" @click="completeTask(task)">
+        <div id="text-div" @click="toggleTaskCompleted">
+          <p> {{task.category}}  -> {{ task.name }}</p>
+        </div>
+      </div>
     </li>
   </ul>
-  <button id="delete-btn" @click="deleteDone" type="button">
-    delete completed
-  </button>
 </template>
 
 <script>
-import Create from './components/Create.vue';
-import Todo from './components/Todo.vue';
 import APIOperations from './APIOperations';
 
 export default {
   data() {
     return {
-      api: new APIOperations(),
+      api: null,
+      tasks: [],
     };
   },
-  components: {
-    Create,
-    Todo,
+  mounted() {
+    this.api = new APIOperations();
+    this.tasks = this.api.getTasks();
   },
   methods: {
-    deleteDone() {
-      this.api.deleteCompletedTasks();
+    completeTask(task) {
+      this.api.setTaskCompleted(task.id);
     },
-  },
-  beforeCreate() {
-    if (window.localStorage.length === 0) {
-      window.localStorage.setItem('todoList', JSON.stringify([]));
-      window.localStorage.setItem('latestID', JSON.stringify(1));
-    }
   },
 };
 </script>

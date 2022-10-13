@@ -20,6 +20,7 @@ repos:
     rev: 22.8.0
     hooks:
       - id: black
+        args: ["--fix"]
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
@@ -42,5 +43,6 @@ repos:
         types_or: [javascript, jsx, ts, tsx, vue]
         args:
           - --config=./frontend/.eslintrc.yml
+          - --fix
         additional_dependencies:
           -   eslint-plugin-vue@v7.5.0
