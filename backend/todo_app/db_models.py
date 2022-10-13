@@ -11,7 +11,8 @@ class Todo(Base):
     title = Column(String, nullable=False)
     done = Column(Boolean, default=False)
     date = Column(Text, default=datetime.now())
-    duration_min = Column(SmallInteger, default=5)
+
+    duration = Column(SmallInteger, default=5)
 
 
 class User(Base):

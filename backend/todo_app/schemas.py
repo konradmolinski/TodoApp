@@ -7,7 +7,7 @@ class TodoBase(BaseModel):
 
 class TodoCreate(TodoBase):
     # Data that is required while creating Todo, but will not be sent from the API when reading Todo
-    duration_min: int | None = None
+    duration: int | None = None
 
 
 class Todo(TodoBase):
@@ -15,7 +15,7 @@ class Todo(TodoBase):
     done: bool
     date: str
 
-    duration_min: int  # minutes
+    duration: int  # minutes
 
     class Config:
         orm_mode = True
