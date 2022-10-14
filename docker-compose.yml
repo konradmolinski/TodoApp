@@ -1,0 +1,10 @@
+services:
+  frontend:
+    build:
+      context: frontend/.
+
+  backend:
+    build:
+      context: backend/.
+    ports:
+      - 8080:8080
