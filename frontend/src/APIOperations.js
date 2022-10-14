@@ -38,7 +38,7 @@ export default class APIOperations {
           category: 'Łazienka',
           cycle_days: 1,
           duration_minutes: 3,
-          overdue_hours: i,
+          overdue_hours: i * 5,
         });
       }
       this.syncTasks();
