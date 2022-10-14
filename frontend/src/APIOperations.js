@@ -3,7 +3,7 @@ export default class APIOperations {
     try {
       this.refreshLocalStorage();
     } catch (e) {
-      console.log('No tasks found');
+      return;
     }
     this.generateTasks();
 
@@ -18,8 +18,9 @@ export default class APIOperations {
   refreshLocalStorage() {
     try {
       this.tasks = JSON.parse({ ...localStorage }.tasks);
+    // eslint-disable-next-line no-empty
     } catch (e) {
-      console.log(e);
+
     }
   }
 
@@ -33,10 +34,11 @@ export default class APIOperations {
       for (let i = 0; i < 10; i += 1) {
         this.tasks.push({
           id: i + 1,
-          name: 'Sprzątanie kuwety',
+          name: `Sprzątanie kuwety${i}`,
           category: 'Łazienka',
           cycle_days: 1,
-          duration_min: 3,
+          duration_minutes: 3,
+          overdue_hours: i,
         });
       }
       this.syncTasks();
