@@ -1,28 +1,29 @@
 <template>
   <main role="main" class="container">
-    <h1 class="mt-2 mb-3">Zadania</h1>
-    <div class="row">
+    <h1 class="mt-2 mb-3 text-center">Zadania</h1>
+    <div class="row flex-nowrap">
       <div class="col-md-11 col-xs-11">
         <v-select
           v-model="selectedItem"
           :options="taskSelectOptions"
+          style="width: 100%"
         ></v-select>
       </div>
-      <div class="col-md-1 col-xs-1">
-        <button @click="toggleTaskCompleted" >✓</button>
+      <div class="col-md-1 col-xs-1 text-right">
+        <button @click="toggleTaskCompleted">✓</button>
       </div>
     </div>
     <p v-if="this.tasks.length === 0" id="empty-list-info">No tasks!</p>
     <div
-      class="row"
+      class="row flex-nowrap pt-4"
       v-for="task in tasks"
       :key="task.id"
       @onclick="toggleTaskCompleted"
     >
-      <div class="col-md-4 col-xs-4">{{ task.category }}</div>
-      <div class="col-md-4 col-xs-4">{{ task.name }}</div>
-      <div class="col-md-2 col-xs-2">{{ task.duration_minutes }}min</div>
-      <div class="col-md-1 col-xs-1">
+      <div class="col-md-3 col-xs-3 pr-0">{{ task.category }}</div>
+      <div class="col-md-5 col-xs-6 pr-0">{{ task.name }}</div>
+      <div class="col-md-2 col-xs-2 pr-0">{{ task.duration_minutes }}min</div>
+      <div class="col-md-1 col-xs-1 text-right">
         <button @click="completeTask(task)">✓</button>
       </div>
     </div>
@@ -75,5 +76,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
