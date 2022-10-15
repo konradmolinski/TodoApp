@@ -1,12 +1,11 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import Column, Date, ForeignKey, Integer, SmallInteger, String
+from sqlalchemy import (Column, DateTime, ForeignKey, Integer, SmallInteger,
+                        String)
 from sqlalchemy.orm import relationship
 
 from .database import Base
-
-# from turtle import back
 
 
 class UserStatus(enum.Enum):
@@ -14,15 +13,15 @@ class UserStatus(enum.Enum):
     DEACTIVATED = "DEACTIVATED"
 
 
-class Category(Base):
+class DBCategory(Base):
     __tablename__ = "category"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
 
-    tasks = relationship("Task", back_populates="category")
+    tasks = relationship("DBTask", back_populates="category")
 
 
-class Task(Base):
+class DBTask(Base):
     __tablename__ = "tasks"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
@@ -31,13 +30,13 @@ class Task(Base):
     category_id = Column(Integer, ForeignKey("category.id"))
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    owner = relationship("User", back_populates="tasks")
-    category = relationship("Category", back_populates="tasks")
+    owner = relationship("DBUser", back_populates="tasks")
+    category = relationship("DBCategory", back_populates="tasks")
 
-    completed_instances = relationship("TasksLog", back_populates="task")
+    completed_instances = relationship("DBTasksLog", back_populates="task")
 
 
-class User(Base):
+class DBUser(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
@@ -45,17 +44,17 @@ class User(Base):
     points = Column(Integer, default=0)
     secret = Column(String, nullable=False)
 
-    tasks = relationship("Task", back_populates="owner")
-    completed_tasks = relationship("TasksLog", back_populates="executor")
+    tasks = relationship("DBTask", back_populates="owner")
+    completed_tasks = relationship("DBTasksLog", back_populates="executor")
 
 
-class TasksLog(Base):
+class DBTasksLog(Base):
     __tablename__ = "tasks_log"
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(Date, default=datetime.now())
+    date = Column(DateTime, default=datetime.now())
     completion_time = Column(Integer, nullable=True)
-    executor_id = Column(Integer, ForeignKey("users.id"))
-    task_id = Column(Integer, ForeignKey("tasks.id"))
+    executor_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
 
-    executor = relationship("User", back_populates="completed_tasks")
-    task = relationship("Task", back_populates="completed_instances")
+    executor = relationship("DBUser", back_populates="completed_tasks")
+    task = relationship("DBTask", back_populates="completed_instances")

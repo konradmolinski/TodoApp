@@ -20,6 +20,7 @@ def complete_task(
     with TodoDB.from_db(db) as db_operations:
         try:
             db_task_log = db_operations.append_task_log(task_log)
+            logger.info("added")
             return schemas.TasksLog.from_orm(db_task_log)
         except Exception as ex:
             logger.error(ex)

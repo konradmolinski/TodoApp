@@ -1,13 +1,11 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime
-from http.client import HTTPException
 from typing import TypeVar
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from . import db_models, schemas
+from . import db_models, logger, schemas
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./todo_app.db"
 
@@ -45,10 +43,11 @@ class TodoDB(DBOperations):
     # def get_tasks(self -> list[db_models.Task]):
     #     return self.session.query(db_models.Task).filter
 
-    def append_task_log(self, task_log: schemas.TasksLogCreate) -> db_models.TasksLog:
-        completed_task = db_models.TasksLog(
+    def append_task_log(self, task_log: schemas.TasksLogCreate) -> db_models.DBTasksLog:
+        completed_task = db_models.DBTasksLog(
             executor_id=task_log.executor_id, task_id=task_log.task_id
         )
+        logger.info("ASD")
         self.session.add(completed_task)
         self.session.commit()
         self.session.refresh(completed_task)
