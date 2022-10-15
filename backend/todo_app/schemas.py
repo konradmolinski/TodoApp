@@ -1,49 +1,74 @@
+from datetime import datetime
+from sqlite3 import Date
+from typing import List, Union
+
 from pydantic import BaseModel
 
 
-class TodoBase(BaseModel):
+class CategoryBase(BaseModel):
     title: str
 
 
-class TodoCreate(TodoBase):
-    # Data that is required while creating Todo, but will not be sent from the API when reading Todo
-    duration: int | None = None
+class CategoryCreate(CategoryBase):
+    pass
 
 
-class Todo(TodoBase):
-    id: int
-    done: bool
-    date: str
-
-    duration: int  # minutes
+class Category(CategoryBase):
+    tasks: "Task"
 
     class Config:
         orm_mode = True
 
 
-class Stats(BaseModel):
-    execution_count: int
-    total_time_spent_min: int
-    avg_time_spent_min: int
-
-
-class TodoStats(Todo):
-    stats: Stats
-
-
-class TodoLog(BaseModel):
-    todo_id: int
-
-
-class Category(BaseModel):
+class UserBase(BaseModel):
     name: str
+    status: str
+    points: int
 
 
-class User(BaseModel):
-    id: int
-    name: str
+class UserCreate(UserBase):
+    secret: str
 
 
-class UserStats(BaseModel):
-    user: User
-    minutes_worked: int
+class User(UserBase):
+    tasks: "Task"
+    completed_tasks: "TasksLog"
+
+    class Config:
+        orm_mode = True
+
+
+class TaskBase(BaseModel):
+    title: str
+    duration: int
+    cycle: int
+    owner_id: int | None = None
+    category_id: int
+
+
+class TaskCreate(TaskBase):
+    pass
+
+
+class Task(TaskBase):
+    completed_instances: "TasksLog"
+
+    class Config:
+        orm_mode = True
+
+
+class TasksLogBase(BaseModel):
+    completion_time: int | None = None
+    executor_id: int
+    task_id: int
+
+
+class TasksLogCreate(TasksLogBase):
+    pass
+
+
+class TasksLog(TasksLogBase):
+    date: datetime
+
+    class Config:
+        orm_mode = True

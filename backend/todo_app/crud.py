@@ -42,32 +42,46 @@ class DBOperations:
 
 
 class TodoDB(DBOperations):
-    def get_todo(self, todo_id: int) -> db_models.Todo | None:
-        return (  # type: ignore
-            self.session.query(db_models.Todo)
-            .filter(db_models.Todo.id == todo_id)
-            .first()
+    # def get_tasks(self -> list[db_models.Task]):
+    #     return self.session.query(db_models.Task).filter
+
+    def append_task_log(self, task_log: schemas.TasksLogCreate) -> db_models.TasksLog:
+        completed_task = db_models.TasksLog(
+            executor_id=task_log.executor_id, task_id=task_log.task_id
         )
-
-    def get_todos(self) -> list[db_models.Todo]:
-        return self.session.query(db_models.Todo).order_by(db_models.Todo.id).all()  # type: ignore
-
-    def create_todo(self, todo: db_models.Todo) -> db_models.Todo:
-        todo = db_models.Todo(title=todo.title)
-        self.session.add(todo)
+        self.session.add(completed_task)
         self.session.commit()
-        self.session.refresh(todo)
-        return todo
+        self.session.refresh(completed_task)
+        return completed_task
 
-    def delete_todo(self, todo_id: int) -> None:
-        self.session.query(db_models.Todo).filter(db_models.Todo.id == todo_id).delete()
-        self.session.commit()
 
-    def get_users(self) -> list[db_models.User]:
-        return self.session.query(db_models.User).all()  # type: ignore
+# class TodoDB(DBOperations):
+#     def get_todo(self, todo_id: int) -> db_models.Todo | None:
+#         return (  # type: ignore
+#             self.session.query(db_models.Todo)
+#             .filter(db_models.Todo.id == todo_id)
+#             .first()
+#         )
 
-    def get_users_stats(
-        self, date_min: datetime | None = None, date_max: datetime | None = None
-    ) -> list[schemas.UserStats]:
-        pass
-        # return schemas.UserStats()
+#     def get_todos(self) -> list[db_models.Todo]:
+#         return self.session.query(db_models.Todo).order_by(db_models.Todo.id).all()  # type: ignore
+
+#     def create_todo(self, todo: db_models.Todo) -> db_models.Todo:
+#         todo = db_models.Todo(title=todo.title)
+#         self.session.add(todo)
+#         self.session.commit()
+#         self.session.refresh(todo)
+#         return todo
+
+#     def delete_todo(self, todo_id: int) -> None:
+#         self.session.query(db_models.Todo).filter(db_models.Todo.id == todo_id).delete()
+#         self.session.commit()
+
+#     def get_users(self) -> list[db_models.User]:
+#         return self.session.query(db_models.User).all()  # type: ignore
+
+#     def get_users_stats(
+#         self, date_min: datetime | None = None, date_max: datetime | None = None
+#     ) -> list[schemas.UserStats]:
+#         pass
+# return schemas.UserStats()
