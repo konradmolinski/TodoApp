@@ -40,3 +40,7 @@ main.css.map
 *.pyc
 *.db
 *.log
+frontend/.vscode
+frontend/dist
+frontend/node_modules
+.vscode
