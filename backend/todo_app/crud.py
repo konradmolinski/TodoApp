@@ -1,8 +1,9 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import TypeVar
+from datetime import datetime
+from typing import Any, TypeVar
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import Session, sessionmaker
 
 from . import db_models, logger, schemas
@@ -52,6 +53,15 @@ class TodoDB(DBOperations):
         self.session.commit()
         self.session.refresh(completed_task)
         return completed_task
+
+    def get_tasks_list(self) -> list[db_models.DBTask]:
+        return self.session.query(db_models.DBTask)
+        # .join(db_models.DBTasksLog)\
+        # .filter(db_models.DBTasksLog.date > datetime.now()))
+
+    def clean_tasks_log(self) -> None:
+        self.session.query(db_models.DBTasksLog).delete()
+        self.session.commit()
 
 
 # class TodoDB(DBOperations):

@@ -1,8 +1,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import (Column, DateTime, ForeignKey, Integer, SmallInteger,
-                        String)
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, SmallInteger, String
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -33,7 +32,9 @@ class DBTask(Base):
     owner = relationship("DBUser", back_populates="tasks")
     category = relationship("DBCategory", back_populates="tasks")
 
-    completed_instances = relationship("DBTasksLog", back_populates="task")
+    completed_instances = relationship(
+        "DBTasksLog", back_populates="task", order_by="desc(DBTasksLog.completion_time)"
+    )
 
 
 class DBUser(Base):

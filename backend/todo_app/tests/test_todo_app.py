@@ -31,9 +31,7 @@ def test_warmup_cleanup() -> None:
     from ..crud import TodoDB
 
     with TodoDB(next(override_get_db()))() as db_operations:
-        todos = db_operations.get_todos()
-        for todo in todos:
-            db_operations.delete_todo(todo.id)
+        db_operations.clean_tasks_log()
 
 
 app.dependency_overrides[get_db] = override_get_db
@@ -41,17 +39,15 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
-def test_create_todo() -> None:
-    response = client.post("/todos", json={"title": "przemekhuj"})
+def test_append_tasks_log() -> None:
+    for task_type in [1, 2, 3]:
+        response = client.post(
+            url="/todos", data={"executor_id": 1, "task_id": task_type}
+        )
+        assert response.status_code == 200
+
+
+def test_get_tasks() -> None:
+    response = client.get("/todos")
     assert response.status_code == 200
-
-
-def test_get_todo() -> None:
-    response = client.get("/todos/1")
-    assert response.status_code == 200
-    assert response.json()["title"] == "przemekhuj"
-
-
-def test_delete_todo() -> None:
-    response = client.delete("/todos/1")
-    assert response.status_code == 204
+    assert len(response.json()) == 0

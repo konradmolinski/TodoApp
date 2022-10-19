@@ -1,11 +1,13 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
+from typing import Any, List
 
 from fastapi import Depends, FastAPI, HTTPException, Response, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from . import logger, schemas
+from .converters import db_task_to_minimal_task
 from .crud import TodoDB
 from .database import get_db
 
@@ -27,6 +29,17 @@ def complete_task(
             raise HTTPException(
                 status_code=400, detail="Couldn't append tasks log with given task"
             )
+
+
+@app.get("/todos", response_model=list[schemas.MinimalTask])
+def get_tasks(db: Session = Depends(get_db)) -> list[schemas.MinimalTask]:
+    with TodoDB.from_db(db) as db_operations:
+        task_list = db_operations.get_tasks_list()
+        task_output: list[schemas.Task] = []
+        for db_task in task_list:
+            task_output.append(db_task_to_minimal_task(db_task))
+
+        return task_output
 
 
 # @app.get("/todos", response_model=list[schemas.Todo], status_code=status.HTTP_200_OK)

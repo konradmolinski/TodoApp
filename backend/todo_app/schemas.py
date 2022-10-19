@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlite3 import Date
-from typing import List, Union
+from typing import List
 
 from pydantic import BaseModel
 
@@ -43,18 +43,11 @@ class TaskBase(BaseModel):
     duration: int
     cycle: int
     owner_id: int | None = None
-    category_id: int
+    category: str
 
 
 class TaskCreate(TaskBase):
     pass
-
-
-class Task(TaskBase):
-    completed_instances: "TasksLog"
-
-    class Config:
-        orm_mode = True
 
 
 class TasksLogBase(BaseModel):
@@ -69,6 +62,21 @@ class TasksLogCreate(TasksLogBase):
 
 class TasksLog(TasksLogBase):
     date: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class MinimalTask(BaseModel):
+    id: int
+    title: str
+    category: str
+    duration: int
+    overdue_hours: int
+
+
+class Task(TaskBase):
+    completed_instances: TasksLog
 
     class Config:
         orm_mode = True
