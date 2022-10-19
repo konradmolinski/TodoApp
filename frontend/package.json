@@ -7,11 +7,11 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
+    "@vitejs/plugin-vue": "^3.1.2",
     "sass": "^1.55.0",
-    "vue": "^3.2.40",
     "vite": "^3.1.7",
-    "@vitejs/plugin-vue": "^3.1.2"
-
+    "vue": "^3.2.40",
+    "vue-select": "^4.0.0-beta.5"
   },
   "devDependencies": {
     "@types/node": "^18.8.0",
@@ -19,6 +19,5 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-vue": "^9.6.0"
-
   }
 }

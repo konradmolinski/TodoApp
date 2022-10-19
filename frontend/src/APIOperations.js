@@ -1,54 +1,58 @@
 export default class APIOperations {
   constructor() {
-    this.refreshLocalStorage();
+    try {
+      this.refreshLocalStorage();
+    } catch (e) {
+      return;
+    }
+    this.generateTasks();
+
     // API URL
     // API KEY
   }
 
+  getTasks() {
+    return this.tasks;
+  }
+
   refreshLocalStorage() {
-    this.todos = JSON.parse({ ...localStorage }.todoList);
-    this.id = JSON.parse({ ...localStorage }.latestID);
+    try {
+      this.tasks = JSON.parse({ ...localStorage }.tasks);
+    // eslint-disable-next-line no-empty
+    } catch (e) {
+
+    }
   }
 
-  reorderTask(todoIdx1, todoIdx2) {
-    const task1 = this.todos[todoIdx1];
-    const task2 = this.todos[todoIdx2];
-
-    this.todos[todoIdx1] = task2;
-    this.todos[todoIdx2] = task1;
-
-    window.localStorage.setItem('todoList', JSON.stringify(this.todos));
-    this.refreshLocalStorage();
+  syncTasks() {
+    window.localStorage.setItem('tasks', JSON.stringify((this.tasks)));
   }
 
-  createTask(title) {
-    const todo = {
-      id: this.id, title, done: false, date: new Date(),
-    };
-    this.todos.push(todo);
-    window.localStorage.setItem('todoList', JSON.stringify(this.todos));
-    window.localStorage.setItem('latestID', JSON.stringify(this.id + 1));
-    this.refreshLocalStorage();
+  generateTasks() {
+    if (!this.tasks || this.tasks.length === 0) {
+      this.tasks = [];
+      for (let i = 0; i < 10; i += 1) {
+        this.tasks.push({
+          id: i + 1,
+          name: `Sprzątanie kuwety${i}`,
+          category: 'Łazienka',
+          cycle_days: 1,
+          duration_minutes: 3,
+          overdue_hours: i * 5,
+        });
+      }
+      this.syncTasks();
+    }
   }
 
-  deleteTask(todoIdx) {
-    this.todos.splice(todoIdx, 1);
-    window.localStorage.setItem('todoList', JSON.stringify(this.todos));
-    this.refreshLocalStorage();
-  }
-
-  toggleTaskCompleted(todoToComplete) {
-    const todo = todoToComplete;
-    todo.done = !todo.done;
-    const todoIdx = this.todos.indexOf(todo);
-    this.todos[todoIdx].done = todo.done;
-    window.localStorage.setItem('todoList', JSON.stringify(this.todos));
-    this.refreshLocalStorage();
-  }
-
-  deleteCompletedTasks() {
-    this.todos = this.todos.filter((element) => element.done === false);
-    window.localStorage.setItem('todoList', JSON.stringify(this.todos));
-    this.refreshLocalStorage();
+  setTaskCompleted(taskId) {
+    for (let i = 0, len = this.tasks.length; i < len; i += 1) {
+      if (this.tasks[i].id === taskId) {
+        this.tasks.splice(i, 1);
+        this.syncTasks();
+        return;
+      }
+    }
+    throw Error('Could not find task');
   }
 }
