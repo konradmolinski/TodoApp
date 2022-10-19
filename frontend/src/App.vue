@@ -56,12 +56,25 @@ export default {
       },
     };
   },
-  created() {
+  async created() {
+    await this.setAuthCookie();
     window.x = this;
     this.api = new APIOperations();
     this.refreshTasks();
   },
   methods: {
+    async setAuthCookie() {
+      const secretKey = 'secret';
+      if ((await window.cookieStore.get(secretKey)) === null) {
+        let password = '';
+        let counter = 0;
+        while (counter < 5 && password.length < 5) {
+          password = window.prompt('Daj hasło', ''); // eslint-disable-line no-alert
+          counter += 1;
+        }
+        await window.cookieStore.set(secretKey, password);
+      }
+    },
     refreshTasks() {
       this.selectedItem = { code: '', label: '' };
       this.tasks = [];
@@ -71,7 +84,6 @@ export default {
           this.tasks[index].bgClass = 'late';
         }
         if (task.overdue_hours > 24) {
-          console.log('superlate');
           this.tasks[index].bgClass = 'super-late';
         }
       });
