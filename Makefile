@@ -16,3 +16,9 @@ migration_create:
 
 migration_apply:
 	cd backend && alembic upgrade head
+
+
+seed_data:
+	cd backend && rm todo_app.db
+	cd backend && alembic upgrade head
+	cd backend && python sqlalchemy_playground.py

@@ -1,8 +1,8 @@
 from datetime import datetime
 from sqlite3 import Date
-from typing import List
+from typing import List, Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class CategoryBase(BaseModel):
@@ -52,7 +52,6 @@ class TaskCreate(TaskBase):
 
 class TasksLogBase(BaseModel):
     completion_time: int | None = None
-    executor_id: int
     task_id: int
 
 
@@ -67,12 +66,29 @@ class TasksLog(TasksLogBase):
         orm_mode = True
 
 
+class MinimalTaskBase(BaseModel):
+    title: str
+    category: str | None = None
+    duration: int | None = None
+    overdue_hours: int
+
+
 class MinimalTask(BaseModel):
     id: int
-    title: str
-    category: str
-    duration: int
-    overdue_hours: int
+
+
+class MinimalTaskCreate(MinimalTaskBase):
+    duration: int | None = None
+    cycle: int | None = None
+    owner_id: int | None = None
+    category_id: int | None = None
+    category: str | None = None
+
+    @validator("category_id", always=True)
+    def mutually_exclusive(cls, v, values) -> Any:  # type: ignore
+        if values["category"] is not None and v:
+            raise ValueError("'category' and 'category_id' are mutually exclusive.")
+        return v
 
 
 class Task(TaskBase):

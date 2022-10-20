@@ -15,7 +15,7 @@ class UserStatus(enum.Enum):
 class DBCategory(Base):
     __tablename__ = "category"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
+    title = Column(String, nullable=False, unique=True)
 
     tasks = relationship("DBTask", back_populates="category")
 
@@ -25,7 +25,7 @@ class DBTask(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     duration = Column(SmallInteger, default=5)
-    cycle = Column(SmallInteger, default=1)
+    cycle = Column(SmallInteger, default=1)  # days
     category_id = Column(Integer, ForeignKey("category.id"))
     owner_id = Column(Integer, ForeignKey("users.id"))
 
@@ -43,7 +43,7 @@ class DBUser(Base):
     name = Column(String, nullable=False)
     status = Column(String, default=UserStatus.ACTIVATED)
     points = Column(Integer, default=0)
-    secret = Column(String, nullable=False)
+    secret = Column(String, nullable=False, unique=True)
 
     tasks = relationship("DBTask", back_populates="owner")
     completed_tasks = relationship("DBTasksLog", back_populates="executor")

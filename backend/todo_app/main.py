@@ -1,13 +1,14 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
-from typing import Any, List
+from typing import Any, List, Optional
 
-from fastapi import Depends, FastAPI, HTTPException, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Response, status, Cookie
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from fastapi.exceptions import RequestValidationError
 
 from . import logger, schemas
-from .converters import db_task_to_minimal_task
+from .converters import db_task_to_minimal_task, minimal_task_to_db_task
 from .crud import TodoDB
 from .database import get_db
 
@@ -16,12 +17,18 @@ app = FastAPI()
 
 @app.post("/todos", response_model=schemas.TasksLog)
 def complete_task(
-    task_log: schemas.TasksLogCreate, db: Session = Depends(get_db)
+    task_log: schemas.TasksLogCreate,
+    secret: str | None = Cookie(None),
+    db: Session = Depends(get_db),
 ) -> schemas.TasksLog:
     logger.info(f"Appending tasks log with task parameters: {task_log}")
     with TodoDB.from_db(db) as db_operations:
         try:
-            db_task_log = db_operations.append_task_log(task_log)
+            user_id = db_operations.get_user_id_from_cookie(secret)
+        except:
+            raise HTTPException(401, detail="Secret not gut")
+        try:
+            db_task_log = db_operations.append_task_log(user_id, task_log)
             logger.info("added")
             return schemas.TasksLog.from_orm(db_task_log)
         except Exception as ex:
@@ -32,14 +39,36 @@ def complete_task(
 
 
 @app.get("/todos", response_model=list[schemas.MinimalTask])
-def get_tasks(db: Session = Depends(get_db)) -> list[schemas.MinimalTask]:
+def get_tasks(
+    secret: str | None = Cookie(None), db: Session = Depends(get_db)
+) -> list[schemas.MinimalTask]:
+
     with TodoDB.from_db(db) as db_operations:
-        task_list = db_operations.get_tasks_list()
+        try:
+            user_id = db_operations.get_user_id_from_cookie(secret)
+        except:
+            raise HTTPException(401, detail="Secret not gut")
+        task_list = db_operations.get_tasks_list(user_id)
+        if not task_list:
+            raise HTTPException(404)
         task_output: list[schemas.Task] = []
         for db_task in task_list:
             task_output.append(db_task_to_minimal_task(db_task))
 
         return task_output
+
+
+@app.post("/hiddenendpoint/tasks")
+def post_tasks(
+    task: schemas.MinimalTaskCreate, db: Session = Depends(get_db)
+) -> schemas.Task:
+    with TodoDB.from_db(db) as db_operations:
+        if not hasattr(task, "category_id") and task.category:
+            task.category_id = db_operations.get_or_create_category_id(task.category)
+            del task.category
+        db_task = minimal_task_to_db_task(task)
+        task = db_operations.create_task(db_task)
+        return db_task_to_minimal_task(task)
 
 
 # @app.get("/todos", response_model=list[schemas.Todo], status_code=status.HTTP_200_OK)

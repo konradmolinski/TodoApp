@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
+from unicodedata import category
 
 from .db_models import DBTask
-from .schemas import MinimalTask
+from .schemas import MinimalTask, MinimalTaskBase, MinimalTaskCreate
 
 
 def db_task_to_minimal_task(db_task: DBTask) -> MinimalTask:
@@ -17,4 +18,14 @@ def db_task_to_minimal_task(db_task: DBTask) -> MinimalTask:
         category=db_task.category.title,
         duration=db_task.duration,
         overdue_hours=overdue_hours,
+    )
+
+
+def minimal_task_to_db_task(task: MinimalTaskCreate) -> MinimalTaskCreate:
+    return DBTask(
+        title=task.title,
+        duration=task.duration,
+        cycle=task.cycle,
+        category_id=task.category_id,
+        owner_id=task.owner_id,
     )
