@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from todo_app.database import SessionLocal
 from typing import Any
-from todo_app.db_models import DBCategory, DBUser
+from todo_app.db_models import DBCategory, DBUser, DBTask
 
 
 def get_db() -> Generator[Any, Any, Any]:
@@ -30,10 +30,26 @@ def create_seed_data() -> None:
         "Wojtka",
         "Konrada",
     ]
+    db_categories = []
     for category in categories:
-        session.add(DBCategory(title=category))
+        db_categories.append(DBCategory(title=category))
+    for db_category in db_categories:
+        session.add(db_category)
+
     session.add(wojtek)
     session.add(konrad)
+    session.commit()
+    session.refresh(wojtek)
+    session.refresh(konrad)
+    for db_category in db_categories:
+        session.refresh(db_category)
+    task_1 = DBTask(
+        title="Czyszczenie prysznica",
+        duration=5,
+        cycle=14,
+        category_id=db_categories[3].id,
+    )
+    session.add(task_1)
     session.commit()
 
 

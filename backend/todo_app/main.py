@@ -12,10 +12,29 @@ from .converters import db_task_to_minimal_task, minimal_task_to_db_task
 from .crud import TodoDB
 from .database import get_db
 
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost",
+    "https://localhost",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:5173",
+]
+
+
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.post("/todos", response_model=schemas.TasksLog)
+
+@app.post("/todos", response_model=schemas.TasksLogCreate)
 def complete_task(
     task_log: schemas.TasksLogCreate,
     secret: str | None = Cookie(None),

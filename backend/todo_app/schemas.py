@@ -73,7 +73,7 @@ class MinimalTaskBase(BaseModel):
     overdue_hours: int
 
 
-class MinimalTask(BaseModel):
+class MinimalTask(MinimalTaskBase):
     id: int
 
 

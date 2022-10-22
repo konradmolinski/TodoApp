@@ -27,8 +27,8 @@
       :class="task.bgClass"
     >
       <div class="col-md-3 col-3 pr-0">{{ task.category }}</div>
-      <div class="col-md-5 col-5 pr-0">{{ task.name }}</div>
-      <div class="col-md-2 col-2 pr-0">{{ task.duration_minutes }}min</div>
+      <div class="col-md-5 col-5 pr-0">{{ task.title }}</div>
+      <div class="col-md-2 col-2 pr-0">{{ task.duration }}min</div>
       <div class="col-md-1 col-1 text-right">
         <button class="btn btn-success" @click="completeTask(task.id)">
           ✓
@@ -78,19 +78,21 @@ export default {
     refreshTasks() {
       this.selectedItem = { code: '', label: '' };
       this.tasks = [];
-      this.tasks = this.api.getTasks();
-      this.tasks.forEach((task, index) => {
-        if (task.overdue_hours > 15) {
-          this.tasks[index].bgClass = 'late';
-        }
-        if (task.overdue_hours > 24) {
-          this.tasks[index].bgClass = 'super-late';
-        }
+      this.api.getTasks().then((tasks) => {
+        this.tasks = tasks;
+        this.tasks.forEach((task, index) => {
+          if (task.overdue_hours > 15) {
+            this.tasks[index].bgClass = 'late';
+          }
+          if (task.overdue_hours > 24) {
+            this.tasks[index].bgClass = 'super-late';
+          }
+        });
+        this.taskSelectOptions = this.tasks.map((task) => ({
+          code: task.id,
+          label: `${task.category} - ${task.title}`,
+        }));
       });
-      this.taskSelectOptions = this.tasks.map((task) => ({
-        code: task.id,
-        label: `${task.category} - ${task.name}`,
-      }));
     },
     completeTask(taskId) {
       this.api.setTaskCompleted(taskId);
@@ -98,9 +100,10 @@ export default {
     },
     toggleTaskCompletedFromSelect() {
       if (this.selectedItem.code) {
-        this.completeTask(this.selectedItem.code);
-        this.selectedItem.code = '';
-        this.selectedItem.label = '';
+        this.completeTask(this.selectedItem.code).then(() => {
+          this.selectedItem.code = '';
+          this.selectedItem.label = '';
+        });
       }
     },
   },

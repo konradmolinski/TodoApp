@@ -1,58 +1,35 @@
+const { VITE_API_URL } = import.meta.env;
+
+const URL_TASKS = `${VITE_API_URL}todos`;
+
+function handleErrors(response) {
+  if (!response.ok) {
+    if (response.status === 401) {
+      window.cookieStore.delete('secret').then();
+      location.reload(); // eslint-disable-line
+    }
+    alert(response.statusText);
+  }
+  return response;
+}
+
 export default class APIOperations {
-  constructor() {
-    try {
-      this.refreshLocalStorage();
-    } catch (e) {
-      return;
-    }
-    this.generateTasks();
-
-    // API URL
-    // API KEY
+  getTasks() { // eslint-disable-line
+    return fetch(URL_TASKS, { method: 'GET', credentials: 'include' })
+      .then(handleErrors)
+      .then((response) => response.json())
+      .then((json) => json);
   }
 
-  getTasks() {
-    return this.tasks;
-  }
-
-  refreshLocalStorage() {
-    try {
-      this.tasks = JSON.parse({ ...localStorage }.tasks);
-    // eslint-disable-next-line no-empty
-    } catch (e) {
-
-    }
-  }
-
-  syncTasks() {
-    window.localStorage.setItem('tasks', JSON.stringify((this.tasks)));
-  }
-
-  generateTasks() {
-    if (!this.tasks || this.tasks.length === 0) {
-      this.tasks = [];
-      for (let i = 0; i < 10; i += 1) {
-        this.tasks.push({
-          id: i + 1,
-          name: `Sprzątanie kuwety${i}`,
-          category: 'Łazienka',
-          cycle_days: 1,
-          duration_minutes: 3,
-          overdue_hours: i * 5,
-        });
-      }
-      this.syncTasks();
-    }
-  }
-
-  setTaskCompleted(taskId) {
-    for (let i = 0, len = this.tasks.length; i < len; i += 1) {
-      if (this.tasks[i].id === taskId) {
-        this.tasks.splice(i, 1);
-        this.syncTasks();
-        return;
-      }
-    }
-    throw Error('Could not find task');
+  setTaskCompleted(taskId) { // eslint-disable-line
+    return fetch(URL_TASKS, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ task_id: taskId }),
+    })
+      .then(handleErrors);
   }
 }
