@@ -13,23 +13,21 @@ function handleErrors(response) {
   return response;
 }
 
-export default class APIOperations {
-  getTasks() { // eslint-disable-line
-    return fetch(URL_TASKS, { method: 'GET', credentials: 'include' })
-      .then(handleErrors)
-      .then((response) => response.json())
-      .then((json) => json);
-  }
+export function getTasks() {
+  return fetch(URL_TASKS, { method: 'GET', credentials: 'include' })
+    .then(handleErrors)
+    .then((response) => response.json())
+    .then((json) => json);
+}
 
-  setTaskCompleted(taskId) { // eslint-disable-line
-    return fetch(URL_TASKS, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ task_id: taskId }),
-    })
-      .then(handleErrors);
-  }
+export function setTaskCompleted(taskId) {
+  return fetch(URL_TASKS, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ task_id: taskId }),
+  })
+    .then(handleErrors);
 }

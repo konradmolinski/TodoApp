@@ -40,7 +40,7 @@
 
 <script>
 import vSelect from 'vue-select';
-import APIOperations from './APIOperations';
+import { getTasks, setTaskCompleted } from './APIOperations';
 import 'vue-select/dist/vue-select.css';
 
 export default {
@@ -58,8 +58,6 @@ export default {
   },
   async created() {
     await this.setAuthCookie();
-    window.x = this;
-    this.api = new APIOperations();
     this.refreshTasks();
   },
   methods: {
@@ -78,7 +76,7 @@ export default {
     refreshTasks() {
       this.selectedItem = { code: '', label: '' };
       this.tasks = [];
-      this.api.getTasks().then((tasks) => {
+      getTasks().then((tasks) => {
         this.tasks = tasks;
         this.tasks.forEach((task, index) => {
           if (task.overdue_hours > 15) {
@@ -95,7 +93,7 @@ export default {
       });
     },
     completeTask(taskId) {
-      this.api.setTaskCompleted(taskId);
+      setTaskCompleted(taskId);
       this.refreshTasks();
     },
     toggleTaskCompletedFromSelect() {
@@ -115,9 +113,9 @@ export default {
 
 <style>
 .super-late {
-  background-color: red;
+  background-color: rgb(184, 116, 116);
 }
 .late {
-  background-color: lightcoral;
+  background-color: rgb(239, 198, 198);
 }
 </style>
