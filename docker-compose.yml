@@ -2,9 +2,11 @@ services:
   frontend:
     build:
       context: frontend/.
+    network_mode: "host"
 
   backend:
     build:
       context: backend/.
     ports:
       - 8080:8080
+    network_mode: "host"
