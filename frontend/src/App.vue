@@ -63,7 +63,7 @@ export default {
   methods: {
     async setAuthCookie() {
       const secretKey = 'secret';
-      if ((await window.cookieStore.get(secretKey)) === null) {
+      if ((await window.cookieStore.get(secretKey)) == null) {
         let password = '';
         let counter = 0;
         while (counter < 5 && password.length < 5) {

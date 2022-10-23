@@ -4,12 +4,13 @@ from typing import Any
 from sqlalchemy import create_engine, event
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from . import logger
+from os import environ
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./todo_app.db"
+DATABASE_URL = environ.get("DATABASE_URL", default="sqlite:///./todo_app.db")
+logger.info(DATABASE_URL)
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 
 def _fk_pragma_on_connect(dbapi_con: Any, con_record: Any) -> None:

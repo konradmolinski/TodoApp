@@ -14,4 +14,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["uvicorn", "todo_app.main:app", "--port",  "8080",  "--host", "0.0.0.0"]
+CMD ["uvicorn", "todo_app.main:app", "--port",  "8000",  "--host", "0.0.0.0"]

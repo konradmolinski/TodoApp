@@ -2,11 +2,19 @@ services:
   frontend:
     build:
       context: frontend/.
-    network_mode: "host"
-
+    ports:
+      - 9000:9000
+    domainname: frontend
   backend:
     build:
       context: backend/.
     ports:
-      - 8080:8080
-    network_mode: "host"
+      - 8000:8000
+    env_file:
+      - .env
+    domainname: backend
+  reverseproxy:
+    build:
+      context: reverseproxy/.
+    ports:
+      - 80:80
