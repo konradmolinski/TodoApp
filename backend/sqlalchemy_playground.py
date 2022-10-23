@@ -45,12 +45,7 @@ def create_seed_data() -> None:
         session.refresh(db_category)
     tasks = {
         "Łazienka": [
-            {
-                "title": "zamiatanie na korytarz przed 17",
-                "duration": 2,
-                "cycle": 1,
-                "owner_id": None,
-            },
+            {"title": "zamiatanie na korytarz przed 17", "duration": 2, "cycle": 1, "owner_id": None},
             {"title": "umycie WC", "duration": 5, "cycle": 2, "owner_id": None},
             {"title": "umycie przysznica", "duration": 5, "cycle": 14, "owner_id": None},
             {"title": "zlewu + lustra", "duration": 5, "cycle": 7, "owner_id": None},
@@ -61,31 +56,11 @@ def create_seed_data() -> None:
         ],
         "Kuchnia": [
             {"title": "zastrzyk Frankowi", "duration": 2, "cycle": 1, "owner_id": wojtek.id},
-            {
-                "title": "wyniesienie śmieci spod zlewu",
-                "duration": 5,
-                "cycle": 1,
-                "owner_id": None,
-            },
-            {
-                "title": "wyniesienie śmieci sortowanych",
-                "duration": 5,
-                "cycle": 2,
-                "owner_id": None,
-            },
-            {
-                "title": "umycie zbiornika od plastików",
-                "duration": 5,
-                "cycle": 7,
-                "owner_id": None,
-            },
+            {"title": "wyniesienie śmieci spod zlewu", "duration": 5, "cycle": 1, "owner_id": None},
+            {"title": "wyniesienie śmieci sortowanych", "duration": 5, "cycle": 2, "owner_id": None},
+            {"title": "umycie zbiornika od plastików", "duration": 5, "cycle": 7, "owner_id": None},
             {"title": "sprzątanie zlewu", "duration": 5, "cycle": 1, "owner_id": None},
-            {
-                "title": "mycie blatów i układanie rzeczy",
-                "duration": 5,
-                "cycle": 1,
-                "owner_id": None,
-            },
+            {"title": "mycie blatów i układanie rzeczy", "duration": 5, "cycle": 1, "owner_id": None},
             {"title": "porządkowanie lodówki", "duration": 5, "cycle": 7, "owner_id": None},
             {"title": "umycie lodówki", "duration": 20, "cycle": 30, "owner_id": None},
             {"title": "umycie kuchenki", "duration": 5, "cycle": 7, "owner_id": None},
@@ -95,26 +70,11 @@ def create_seed_data() -> None:
             {"title": "Opróźnienie Adama", "duration": 3, "cycle": 1, "owner_id": None},
         ],
         "Salon": [
-            {
-                "title": "Sprzątanie po nasiadówie",
-                "duration": 10,
-                "cycle": 0,
-                "owner_id": None,
-            },
-            {
-                "title": "Fotele czyste od futra",
-                "duration": 10,
-                "cycle": 0,
-                "owner_id": wojtek.id,
-            },
+            {"title": "Sprzątanie po nasiadówie", "duration": 10, "cycle": 0, "owner_id": None},
+            {"title": "Fotele czyste od futra", "duration": 10, "cycle": 0, "owner_id": wojtek.id},
             {"title": "Odkurzanie pokoju", "duration": 7, "cycle": 0, "owner_id": None},
             {"title": "Uprzątnięcie pokoju", "duration": 10, "cycle": 0, "owner_id": None},
-            {
-                "title": "Sprzątnięcie balkonu",
-                "duration": 10,
-                "cycle": 0,
-                "owner_id": wojtek.id,
-            },
+            {"title": "Sprzątnięcie balkonu", "duration": 10, "cycle": 0, "owner_id": wojtek.id},
             {"title": "", "duration": 10, "cycle": 0, "owner_id": None},
             {"title": "umycie okien", "duration": 30, "cycle": 90, "owner_id": None},
         ],
