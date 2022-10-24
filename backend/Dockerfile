@@ -12,6 +12,7 @@ RUN pipenv install --system
 
 WORKDIR /app
 
-COPY . .
+# COPY . .
 
-CMD ["uvicorn", "todo_app.main:app", "--port",  "8000",  "--host", "0.0.0.0"]
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]
