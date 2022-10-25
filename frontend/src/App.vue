@@ -70,7 +70,7 @@ export default {
           password = window.prompt('Daj hasło', ''); // eslint-disable-line no-alert
           counter += 1;
         }
-        await window.Cookie.set(secretKey, password);
+        window.Cookie.set(secretKey, password);
       }
     },
     refreshTasks() {
