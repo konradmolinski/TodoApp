@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+sleep 5
 ## migrate database
 alembic upgrade head
 
