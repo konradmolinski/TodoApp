@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
-pip freeze --local
-## Run startup command
+
+## migrate database
 alembic upgrade head
 
 ## Running passed command
