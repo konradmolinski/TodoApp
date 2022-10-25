@@ -21,7 +21,10 @@ origins = [
     "https://localhost",
     "http://localhost",
     "http://localhost:8080",
-    "http://localhost:5173",
+    "http://localhost:9000",
+    "http://localtodo",
+    "http://sprzatanie.wojtass.pl",
+    "https://sprzatanie.wojtass.pl",
 ]
 
 
@@ -74,6 +77,7 @@ def get_tasks(secret: str | None = Cookie(None), db: Session = Depends(get_db)) 
         for db_task in task_list:
             task_output.append(db_task_to_minimal_task(db_task))
 
+        task_output.sort(key=lambda task: task.overdue_hours, reverse=True)
         return task_output
 
 

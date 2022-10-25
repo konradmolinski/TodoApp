@@ -5,9 +5,10 @@ const URL_TASKS = `${VITE_API_URL}todos`;
 function handleErrors(response) {
   if (!response.ok) {
     if (response.status === 401) {
-      window.cookieStore.delete('secret').then();
+      window.Cookie.clear('secret').then();
       location.reload(); // eslint-disable-line
     }
+    // eslint-disable-next-line no-alert
     alert(response.statusText);
   }
   return response;

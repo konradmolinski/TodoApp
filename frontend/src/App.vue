@@ -63,14 +63,14 @@ export default {
   methods: {
     async setAuthCookie() {
       const secretKey = 'secret';
-      if ((await window.cookieStore.get(secretKey)) == null) {
+      if ((window.Cookie.get(secretKey)) == null) {
         let password = '';
         let counter = 0;
         while (counter < 5 && password.length < 5) {
           password = window.prompt('Daj hasło', ''); // eslint-disable-line no-alert
           counter += 1;
         }
-        await window.cookieStore.set(secretKey, password);
+        await window.Cookie.set(secretKey, password);
       }
     },
     refreshTasks() {

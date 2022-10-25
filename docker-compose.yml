@@ -20,6 +20,8 @@ services:
       context: reverseproxy/.
     ports:
       - 80:80
+    #volumes:
+    #  - ./frontend/dist:/www/frontend
   db:
     image: postgres:14.1-alpine
     restart: always
