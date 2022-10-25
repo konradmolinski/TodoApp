@@ -14,6 +14,8 @@ from .database import get_db
 
 from fastapi.middleware.cors import CORSMiddleware
 
+from psycopg2 import ProgrammingError
+
 origins = [
     "http://localhost",
     "https://localhost",
@@ -52,21 +54,19 @@ def complete_task(
             return schemas.TasksLog.from_orm(db_task_log)
         except Exception as ex:
             logger.error(ex)
-            raise HTTPException(
-                status_code=400, detail="Couldn't append tasks log with given task"
-            )
+            raise HTTPException(status_code=400, detail="Couldn't append tasks log with given task")
 
 
 @app.get("/todos", response_model=list[schemas.MinimalTask])
-def get_tasks(
-    secret: str | None = Cookie(None), db: Session = Depends(get_db)
-) -> list[schemas.MinimalTask]:
+def get_tasks(secret: str | None = Cookie(None), db: Session = Depends(get_db)) -> list[schemas.MinimalTask]:
 
     with TodoDB.from_db(db) as db_operations:
         try:
             user_id = db_operations.get_user_id_from_cookie(secret)
-        except:
+        except Exception as e:
+            logger.error(e)
             raise HTTPException(401, detail="Secret not gut")
+
         task_list = db_operations.get_tasks_list(user_id)
         if not task_list:
             raise HTTPException(404)
@@ -78,9 +78,7 @@ def get_tasks(
 
 
 @app.post("/hiddenendpoint/tasks")
-def post_tasks(
-    task: schemas.MinimalTaskCreate, db: Session = Depends(get_db)
-) -> schemas.Task:
+def post_tasks(task: schemas.MinimalTaskCreate, db: Session = Depends(get_db)) -> schemas.Task:
     with TodoDB.from_db(db) as db_operations:
         if not hasattr(task, "category_id") and task.category:
             task.category_id = db_operations.get_or_create_category_id(task.category)

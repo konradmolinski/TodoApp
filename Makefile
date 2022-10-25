@@ -18,7 +18,11 @@ migration_apply:
 	cd backend && alembic upgrade head
 
 
-seed_data:
+seed_data_sqlite:
 	cd backend && rm todo_app.db
+	cd backend && alembic upgrade head
+	cd backend && python sqlalchemy_playground.py
+
+seed_data_postgres:
 	cd backend && alembic upgrade head
 	cd backend && python sqlalchemy_playground.py

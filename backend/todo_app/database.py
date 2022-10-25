@@ -7,17 +7,23 @@ from sqlalchemy.orm import sessionmaker
 from . import logger
 from os import environ
 
-DATABASE_URL = environ.get("DATABASE_URL", default="sqlite:///./todo_app.db")
+
+DATABASE_URL = environ.get(
+    "DATABASE_URL",
+    default="postgresql://postgres:postgres@localhost/todoapp?connect_timeout=10&application_name=todoapp",
+)
 logger.info(DATABASE_URL)
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+if "sqlite" in DATABASE_URL:
 
+    def _fk_pragma_on_connect(dbapi_con: Any, con_record: Any) -> None:
+        dbapi_con.execute("pragma foreign_keys=ON")
 
-def _fk_pragma_on_connect(dbapi_con: Any, con_record: Any) -> None:
-    dbapi_con.execute("pragma foreign_keys=ON")
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+    event.listen(engine, "connect", _fk_pragma_on_connect)
+else:
+    engine = create_engine(DATABASE_URL)
 
-
-event.listen(engine, "connect", _fk_pragma_on_connect)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base: Any = declarative_base()

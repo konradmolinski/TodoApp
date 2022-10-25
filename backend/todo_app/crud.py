@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 
 from . import db_models, logger, schemas
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./todo_app.db"
 
 _T = TypeVar("_T", bound="DBOperations")
 
@@ -42,12 +41,8 @@ class TodoDB(DBOperations):
     # def get_tasks(self -> list[db_models.Task]):
     #     return self.session.query(db_models.Task).filter
 
-    def append_task_log(
-        self, user_id: int, task_log: schemas.TasksLogCreate
-    ) -> db_models.DBTasksLog:
-        completed_task = db_models.DBTasksLog(
-            executor_id=user_id, task_id=task_log.task_id
-        )
+    def append_task_log(self, user_id: int, task_log: schemas.TasksLogCreate) -> db_models.DBTasksLog:
+        completed_task = db_models.DBTasksLog(executor_id=user_id, task_id=task_log.task_id)
         logger.info("ASD")
         self.session.add(completed_task)
         self.session.commit()
@@ -86,11 +81,7 @@ class TodoDB(DBOperations):
     def get_user_id_from_cookie(self, secret: str | None = None) -> db_models.DBUser:
         if not secret:
             raise Exception("Cookie not delivered")
-        user = (
-            self.session.query(db_models.DBUser)
-            .filter(db_models.DBUser.secret == secret)
-            .first()
-        )
+        user = self.session.query(db_models.DBUser).filter(db_models.DBUser.secret == secret).first()
         if not user:
             raise Exception("User not found")
         return user.id

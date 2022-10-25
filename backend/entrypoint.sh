@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-
+pip freeze --local
 ## Run startup command
 alembic upgrade head
 
