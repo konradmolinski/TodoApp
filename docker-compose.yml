@@ -7,7 +7,8 @@ services:
     domainname: frontend
   backend:
     build:
-      context: backend/.
+      context: backend/
+      dockerfile: Dockerfile
     ports:
       - 8000:8000
     env_file:
@@ -15,6 +16,17 @@ services:
     volumes:
       - ./backend:/app
     domainname: backend
+  jupyter:
+    build:
+      context: backend/
+      dockerfile: Dockerfile-jupyter
+    ports:
+      - 8500:8500
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    domainname: jupyter
   reverseproxy:
     build:
       context: reverseproxy/.
